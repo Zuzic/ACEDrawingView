@@ -25,6 +25,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ACEDrawingLabelView.h"
+#import "ACEDrawingTextView.h"
 
 #define ACEDrawingViewVersion   2.0.1
 
@@ -37,6 +38,7 @@ typedef enum {
     ACEDrawingToolTypeEllipseStroke,
     ACEDrawingToolTypeEllipseFill,
     ACEDrawingToolTypeEraser,
+    ACEDrawingToolTypeDraggableLabel,
     ACEDrawingToolTypeDraggableText,
     ACEDrawingToolTypeCustom,
 } ACEDrawingToolType;
@@ -48,7 +50,7 @@ typedef NS_ENUM(NSUInteger, ACEDrawingMode) {
 
 @protocol ACEDrawingViewDelegate, ACEDrawingTool;
 
-@interface ACEDrawingView : UIView<ACEDrawingLabelViewDelegate>
+@interface ACEDrawingView : UIView<ACEDrawingLabelViewDelegate, ACEDrawingTextViewDelegate>
 
 @property (nonatomic, assign) ACEDrawingToolType drawTool;
 @property (nonatomic, strong) id<ACEDrawingTool> customDrawTool;

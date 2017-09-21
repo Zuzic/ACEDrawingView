@@ -52,7 +52,8 @@
 @property (nonatomic, strong) id<ACEDrawingTool> currentTool;
 @property (nonatomic, strong) UIImage *cacheImage;
 
-@property (nonatomic, strong) ACEDrawingLabelView *draggableTextView;
+@property (nonatomic, strong) ACEDrawingLabelView *draggableLabel;
+@property (nonatomic, strong) ACEDrawingTextView *draggableTextView;
 @end
 
 #pragma mark -
@@ -245,6 +246,13 @@
             return ACE_AUTORELEASE([ACEDrawingArrowTool new]);
         }
             
+        case ACEDrawingToolTypeDraggableLabel:
+        {
+            ACEDrawingDraggableLabelTool *tool = ACE_AUTORELEASE([ACEDrawingDraggableLabelTool new]);
+            tool.drawingView = self;
+            return tool;
+        }
+        
         case ACEDrawingToolTypeDraggableText:
         {
             ACEDrawingDraggableTextTool *tool = ACE_AUTORELEASE([ACEDrawingDraggableTextTool new]);
@@ -297,6 +305,10 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if (self.draggableLabel.isEditing && self.drawTool != ACEDrawingToolTypeDraggableLabel) {
+        [self.draggableLabel hideEditingHandles];
+    }
+    
     if (self.draggableTextView.isEditing && self.drawTool != ACEDrawingToolTypeDraggableText) {
         [self.draggableTextView hideEditingHandles];
     }
@@ -318,7 +330,7 @@
     
     // Handle special cases for tool types. The else case handles all the non-text drawing tools.
     // The draggable text tool is purposely left in for better code clarity, even though it does nothing.
-    if ([self.currentTool class] == [ACEDrawingDraggableTextTool class]) {
+    if ([self.currentTool class] == [ACEDrawingDraggableLabelTool class]) {
         // do nothing
         
     } else {
@@ -358,7 +370,7 @@
         
         [self setNeedsDisplayInRect:drawBox];
         
-    } else if ([self.currentTool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
+    } else if ([self.currentTool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
         return;
     
     } else {
@@ -373,13 +385,13 @@
     // make sure a point is recorded
     [self touchesMoved:touches withEvent:event];
     
-    if ([self.currentTool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
-        if (self.draggableTextView.isEditing) {
-            [self.draggableTextView hideEditingHandles];
+    if ([self.currentTool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
+        if (self.draggableLabel.isEditing) {
+            [self.draggableLabel hideEditingHandles];
         } else {
             CGPoint point = [[touches anyObject] locationInView:self];
             [self.currentTool setInitialPoint:point];
-            self.draggableTextView = ((ACEDrawingDraggableTextTool *)self.currentTool).labelView;
+            self.draggableLabel = ((ACEDrawingDraggableLabelTool *)self.currentTool).labelView;
             
             [self.pathArray addObject:self.currentTool];
             
@@ -469,8 +481,8 @@
     [self resetTool];
     
     for (id<ACEDrawingTool> tool in self.pathArray) {
-        if ([tool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
-            [(ACEDrawingDraggableTextTool *)tool undraw];
+        if ([tool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
+            [(ACEDrawingDraggableLabelTool *)tool undraw];
         }
     }
     
@@ -491,8 +503,8 @@
 - (void)hideTextToolHandles
 {
     for (id<ACEDrawingTool> tool in self.pathArray) {
-        if ([tool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
-            [(ACEDrawingDraggableTextTool *)tool hideHandle];
+        if ([tool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
+            [(ACEDrawingDraggableLabelTool *)tool hideHandle];
         }
     }
 }
@@ -515,8 +527,8 @@
         
         // undo for tools last state
         if ([self lastStateForTool:undoState.tool inStateArray:self.undoStates]) {
-            if ([undoState.tool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
-                [(ACEDrawingDraggableTextTool *)undoState.tool undraw];
+            if ([undoState.tool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
+                [(ACEDrawingDraggableLabelTool *)undoState.tool undraw];
             }
             
             [self.pathArray enumerateObjectsUsingBlock:^(id<ACEDrawingTool> tool, NSUInteger idx, BOOL *stop) {
@@ -607,11 +619,11 @@
 #endif
 }
 
-#pragma mark - ACEDrawingLabelViewDelegate
+#pragma mark - ACEDrawingTextViewDelegate
 
 - (void)labelViewDidClose:(ACEDrawingLabelView *)label
 {
-    ACEDrawingDraggableTextTool *tool = [self draggableTextToolForLabel:label];
+    ACEDrawingDraggableLabelTool *tool = [self draggableTextToolForLabel:label];
     
     // TODO: handle close for adding redo state on close
     [self.pathArray removeObject:tool];
@@ -624,7 +636,7 @@
 
 - (void)labelViewDidBeginEditing:(ACEDrawingLabelView *)label
 {
-    ACEDrawingDraggableTextTool *tool = [self draggableTextToolForLabel:label];
+    ACEDrawingDraggableLabelTool *tool = [self draggableTextToolForLabel:label];
     
     if (tool) { [self.undoStates addObject:[tool captureToolState]]; }
 }
@@ -637,12 +649,12 @@
 
 - (void)labelViewDidShowEditingHandles:(ACEDrawingLabelView *)label
 {
-    self.draggableTextView = label;    
+    self.draggableLabel = label;    
 }
 
 - (void)labelViewDidHideEditingHandles:(ACEDrawingLabelView *)label
 {
-    ACEDrawingDraggableTextTool *tool = [self draggableTextToolForLabel:label];
+    ACEDrawingDraggableLabelTool *tool = [self draggableTextToolForLabel:label];
     
     if (![tool.labelView.textValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length) {
         [self.pathArray removeObject:tool];
@@ -666,12 +678,83 @@
     }
 }
 
-- (ACEDrawingDraggableTextTool *)draggableTextToolForLabel:(ACEDrawingLabelView *)label
+- (ACEDrawingDraggableLabelTool *)draggableTextToolForLabel:(ACEDrawingLabelView *)label
+{
+    for (id<ACEDrawingTool> tool in self.pathArray) {
+        if ([tool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
+            ACEDrawingDraggableLabelTool *textTool = tool;
+            if (textTool.labelView == label) { return textTool; }
+        }
+    }
+    
+    return nil;
+}
+
+#pragma mark - ACEDrawingLabelViewDelegate
+
+- (void)textViewDidClose:(ACEDrawingTextView *)textView
+{
+    ACEDrawingDraggableTextTool *tool = [self draggableTextToolForTextView:textView];
+    
+    // TODO: handle close for adding redo state on close
+    [self.pathArray removeObject:tool];
+    
+    // call the delegate
+    if ([self.delegate respondsToSelector:@selector(drawingView:didEndDrawUsingTool:)]) {
+        [self.delegate drawingView:self didEndDrawUsingTool:self.currentTool];
+    }
+}
+
+- (void)textViewDidBeginEditing:(ACEDrawingTextView *)textView
+{
+    ACEDrawingDraggableTextTool *tool = [self draggableTextToolForTextView:textView];
+    
+    if (tool) { [self.undoStates addObject:[tool captureToolState]]; }
+}
+
+- (void)testViewWillShowEditingHandles:(ACEDrawingTextView *)testView
+{
+    // make sure all text tool handles are hidden before we show the next one
+    [self hideTextToolHandles];
+}
+
+- (void)textViewDidShowEditingHandles:(ACEDrawingTextView *)textView
+{
+    self.draggableTextView = textView;
+}
+
+- (void)textViewDidHideEditingHandles:(ACEDrawingTextView *)textView
+{
+    ACEDrawingDraggableTextTool *tool = [self draggableTextToolForTextView:textView];
+    
+    if (![tool.textView.textValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length) {
+        [self.pathArray removeObject:tool];
+    }
+    
+    // if there are no undo states for the current tool, then we need to capture the first state
+    NSInteger numberOfStates = 0;
+    for (ACEDrawingToolState *state in self.undoStates) {
+        if (state.tool == tool) {
+            numberOfStates++;
+        }
+    }
+    
+    if (numberOfStates == 0 && tool) {
+        [self.undoStates addObject:[tool captureToolState]];
+        
+        // call the delegate
+        if ([self.delegate respondsToSelector:@selector(drawingView:didEndDrawUsingTool:)]) {
+            [self.delegate drawingView:self didEndDrawUsingTool:tool];
+        }
+    }
+}
+
+- (ACEDrawingDraggableTextTool *)draggableTextToolForTextView:(ACEDrawingTextView *)textView
 {
     for (id<ACEDrawingTool> tool in self.pathArray) {
         if ([tool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
             ACEDrawingDraggableTextTool *textTool = tool;
-            if (textTool.labelView == label) { return textTool; }
+            if (textTool.textView == textView) { return textTool; }
         }
     }
     

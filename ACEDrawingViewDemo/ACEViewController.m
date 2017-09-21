@@ -162,8 +162,10 @@
                     break;
                     
                 case 8:
-                    self.drawingView.drawTool = ACEDrawingToolTypeDraggableText;
+                    self.drawingView.drawTool = ACEDrawingToolTypeDraggableLabel;
                     break;
+                case 9:
+                    self.drawingView.drawTool = ACEDrawingToolTypeDraggableText;
             }
             
             // if eraser, disable color and alpha selection

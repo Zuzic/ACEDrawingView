@@ -205,6 +205,156 @@ CGPoint midPoint(CGPoint p1, CGPoint p2)
 @synthesize lineAlpha   = _lineAlpha;     // Not used for this tool
 @synthesize lineWidth   = _lineWidth;     // Not used for this tool
 @synthesize drawingView = _drawingView;
+@synthesize textView   = _textView;
+
+- (void)setInitialPoint:(CGPoint)firstPoint
+{
+    CGRect frame = CGRectMake(firstPoint.x, firstPoint.y, 50, 100);
+    
+    _textView = [[ACEDrawingTextView alloc] initWithFrame:frame];
+    _textView.delegate     = self.drawingView;
+    _textView.fontSize     = 18.0;
+    _textView.fontName     = self.drawingView.draggableTextFontName ?: [UIFont systemFontOfSize:_textView.fontSize].fontName;
+    _textView.textColor    = self.lineColor;
+    _textView.closeImage   = self.drawingView.draggableTextCloseImage;
+    _textView.rotateImage  = self.drawingView.draggableTextRotateImage;
+}
+
+- (void)moveFromPoint:(CGPoint)startPoint toPoint:(CGPoint)endPoint
+{
+    // Not used for this tool
+}
+
+- (void)draw
+{
+    if (self.textView != nil && self.textView.superview == nil) {
+        [self.drawingView addSubview:self.textView];
+    }
+}
+
+- (void)applyToolState:(ACEDrawingToolState *)state
+{
+    if (state.hasPositionObject) {
+        [self applyTransform:state.positionObject];
+    }
+    
+    [self draw];
+}
+
+- (ACEDrawingToolState *)captureToolState
+{
+    return [ACEDrawingToolState stateForTool:self capturePosition:YES];
+}
+
+- (id)capturePositionObject
+{
+    return [ACEDrawingTextViewTransform transform:self.textView.transform
+                                          atCenter:self.textView.center
+                                        withBounds:self.textView.bounds];
+}
+
+- (void)hideHandle
+{
+    [self.textView hideEditingHandles];
+}
+
+- (NSMutableArray *)redoPositions
+{
+    if (!_redoPositions) {
+        _redoPositions = [NSMutableArray new];
+    }
+    return _redoPositions;
+}
+
+- (NSMutableArray *)undoPositions
+{
+    if (!_undoPositions) {
+        _undoPositions = [NSMutableArray new];
+    }
+    return _undoPositions;
+}
+
+- (void)applyTransform:(ACEDrawingLabelViewTransform *)t
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.textView.center = t.center;
+        self.textView.transform = t.transform;
+        self.textView.bounds = t.bounds;
+        [self.textView resizeInRect:t.bounds];
+    }];
+}
+
+- (void)capturePosition
+{
+    [self.undoPositions addObject:[ACEDrawingLabelViewTransform transform:self.textView.transform
+                                                                 atCenter:self.textView.center
+                                                               withBounds:self.textView.bounds]];
+    // clear redoPositions
+    self.redoPositions = nil;
+}
+
+- (void)undraw
+{
+    [self.textView removeFromSuperview];
+}
+
+- (BOOL)canRedo
+{
+    return self.redoPositions.count > 0 && self.textView.superview;
+}
+
+- (BOOL)redo
+{
+    // add transform to undoPositions
+    [self.undoPositions addObject:[ACEDrawingLabelViewTransform transform:self.textView.transform
+                                                                 atCenter:self.textView.center
+                                                               withBounds:self.textView.bounds]];
+    // apply transform
+    ACEDrawingLabelViewTransform *t = [self.redoPositions lastObject];
+    [self applyTransform:t];
+    
+    // remove transform from redoPositions
+    [self.redoPositions removeLastObject];
+    
+    return ![self canRedo];
+}
+
+- (BOOL)canUndo
+{
+    return self.undoPositions.count > 0;
+}
+
+- (void)undo
+{
+    // add transform to redoPositions
+    [self.redoPositions addObject:[ACEDrawingLabelViewTransform transform:self.textView.transform
+                                                                 atCenter:self.textView.center
+                                                               withBounds:self.textView.bounds]];
+    // apply transform
+    ACEDrawingLabelViewTransform *t = [self.undoPositions lastObject];
+    [self applyTransform:t];
+    
+    // remove transform from undoPositions
+    [self.undoPositions removeLastObject];
+}
+
+@end
+
+#pragma mark - ACEDrawingDraggableTextTool
+
+@interface ACEDrawingDraggableLabelTool ()
+@property (nonatomic, strong) NSMutableArray *redoPositions;
+@property (nonatomic, strong) NSMutableArray *undoPositions;
+@end
+
+#pragma mark -
+
+@implementation ACEDrawingDraggableLabelTool
+
+@synthesize lineColor   = _lineColor;
+@synthesize lineAlpha   = _lineAlpha;     // Not used for this tool
+@synthesize lineWidth   = _lineWidth;     // Not used for this tool
+@synthesize drawingView = _drawingView;
 @synthesize labelView   = _labelView;
 
 - (void)setInitialPoint:(CGPoint)firstPoint

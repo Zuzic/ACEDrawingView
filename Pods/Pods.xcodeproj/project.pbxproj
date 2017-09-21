@@ -22,6 +22,8 @@
 		A59A9AAFDEE915C56AD28E062C84A5D5 /* ACEDrawingTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F929B52933B883154C2D0E38086F8270 /* ACEDrawingTools.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ACE634545E68D4FDB7A7B14D3C3CB315 /* ACEDrawingToolState.h in Headers */ = {isa = PBXBuildFile; fileRef = 618EBA812405ECA8A6320155DC02638F /* ACEDrawingToolState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B61F19001C9BE395A4D98F166C1E6B98 /* ACEDrawingToolState.m in Sources */ = {isa = PBXBuildFile; fileRef = E1265AAB848FFFD05D5F08371032C85E /* ACEDrawingToolState.m */; };
+		BBA5C3EB1F73B7FB00E2F5EF /* ACEDrawingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA5C3E91F73B7FB00E2F5EF /* ACEDrawingTextView.m */; };
+		BBA5C3EC1F73B7FB00E2F5EF /* ACEDrawingTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = BBA5C3EA1F73B7FB00E2F5EF /* ACEDrawingTextView.h */; };
 		C170C4CDE9C6386ED1ADA7A05B004E1F /* ACEDrawingLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = EB58503BECFBD1EAC9197335279E7FDF /* ACEDrawingLabelView.m */; };
 		C223519C06EF6CD43A134D565C4E39AF /* ACEDrawingLabelView.h in Headers */ = {isa = PBXBuildFile; fileRef = 248CFAB07320B13B80EBAA983A8609EE /* ACEDrawingLabelView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D18629FB49C7F83358F9992BB9248BEB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90AAE8973B935FD4979EEDFB8B1E12AC /* Foundation.framework */; };
@@ -72,6 +74,8 @@
 		9EC7E87548CB643E26BC681D67AB4CD9 /* ResourceBundle-ACEDraggableText-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-ACEDraggableText-Info.plist"; sourceTree = "<group>"; };
 		ACEDAEEED83FD9C428834658C2316922 /* sticker_resize.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = sticker_resize.png; sourceTree = "<group>"; };
 		AEB88002D3D9AAF87B76B0F2C51AD6CB /* Pods-ACEDrawingViewDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ACEDrawingViewDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		BBA5C3E91F73B7FB00E2F5EF /* ACEDrawingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEDrawingTextView.m; sourceTree = "<group>"; };
+		BBA5C3EA1F73B7FB00E2F5EF /* ACEDrawingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEDrawingTextView.h; sourceTree = "<group>"; };
 		BCDC205533B36933C58465A348809568 /* Pods-ACEDrawingViewDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ACEDrawingViewDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C43383922FE4E9BE9A89F61DF65AD2D1 /* Pods-ACEDrawingViewDemo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ACEDrawingViewDemo-dummy.m"; sourceTree = "<group>"; };
 		C4CB37FAE55A3984A36CA9A07CB0D407 /* ACEDrawingView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ACEDrawingView.h; sourceTree = "<group>"; };
@@ -238,6 +242,8 @@
 		933D8CF3C925ED6C3232F57F16F6E0AA /* ACEDrawingView */ = {
 			isa = PBXGroup;
 			children = (
+				BBA5C3EA1F73B7FB00E2F5EF /* ACEDrawingTextView.h */,
+				BBA5C3E91F73B7FB00E2F5EF /* ACEDrawingTextView.m */,
 				248CFAB07320B13B80EBAA983A8609EE /* ACEDrawingLabelView.h */,
 				EB58503BECFBD1EAC9197335279E7FDF /* ACEDrawingLabelView.m */,
 				F929B52933B883154C2D0E38086F8270 /* ACEDrawingTools.h */,
@@ -285,6 +291,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBA5C3EC1F73B7FB00E2F5EF /* ACEDrawingTextView.h in Headers */,
 				C223519C06EF6CD43A134D565C4E39AF /* ACEDrawingLabelView.h in Headers */,
 				A59A9AAFDEE915C56AD28E062C84A5D5 /* ACEDrawingTools.h in Headers */,
 				ACE634545E68D4FDB7A7B14D3C3CB315 /* ACEDrawingToolState.h in Headers */,
@@ -421,6 +428,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBA5C3EB1F73B7FB00E2F5EF /* ACEDrawingTextView.m in Sources */,
 				C170C4CDE9C6386ED1ADA7A05B004E1F /* ACEDrawingLabelView.m in Sources */,
 				0240C4EF00BD305570D0AA7A647B988D /* ACEDrawingTools.m in Sources */,
 				B61F19001C9BE395A4D98F166C1E6B98 /* ACEDrawingToolState.m in Sources */,

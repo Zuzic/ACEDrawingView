@@ -29,6 +29,7 @@
 @class ACEDrawingView;
 @class ACEDrawingLabelView;
 @class ACEDrawingToolState;
+@class ACEDrawingTextView;
 
 #if __has_feature(objc_arc)
 #define ACE_HAS_ARC 1
@@ -89,6 +90,25 @@
 #pragma mark -
 
 @interface ACEDrawingDraggableTextTool : NSObject<ACEDrawingTool>
+
+@property (nonatomic, weak) ACEDrawingView *drawingView;
+@property (nonatomic, readonly) ACEDrawingTextView *textView;
+
+- (void)capturePosition;
+- (void)hideHandle;
+- (void)undraw;
+
+- (BOOL)canRedo;
+- (BOOL)redo;
+
+- (BOOL)canUndo;
+- (void)undo;
+
+@end
+
+#pragma mark -
+
+@interface ACEDrawingDraggableLabelTool : NSObject<ACEDrawingTool>
 
 @property (nonatomic, weak) ACEDrawingView *drawingView;
 @property (nonatomic, readonly) ACEDrawingLabelView *labelView;
