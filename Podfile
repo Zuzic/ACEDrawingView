@@ -2,7 +2,7 @@
 platform :ios, '7.0'
 
 target 'ACEDrawingViewDemo' do
-  pod 'ACEDrawingView', :path => './'
+ pod 'ACEDrawingView', :git => 'https://github.com/Zuzic/ACEDrawingView.git'
 
   target 'ACEDrawingViewDemoTests' do
     inherit! :search_paths
