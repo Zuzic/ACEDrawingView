@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'ACEDrawingView'
-  s.version      = '2.2.1'
+  s.version      = '2.2.3'
   s.license      = { :type => 'Apache 2.0 License', :file => 'LICENSE.txt' }
   s.summary      = 'An open source iOS component to create a drawing app.'
   s.homepage     = 'https://github.com/acerbetti/ACEDrawingView'
