@@ -1,7 +1,7 @@
 /*
  * ACEDrawingView: https://github.com/acerbetti/ACEDrawingView
  *
- * Copyright (c) 2016 Matthew Jackson
+ * Copyright (c) 2016 Yury Zenko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,6 @@
 #import "ACEDrawingTextView.h"
 #import <QuartzCore/QuartzCore.h>
 
-CG_INLINE CGPoint CGRectGetCenter(CGRect rect)
-{
-    return CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
-}
-
-CG_INLINE CGRect CGRectScale(CGRect rect, CGFloat wScale, CGFloat hScale)
-{
-    return CGRectMake(rect.origin.x * wScale, rect.origin.y * hScale, rect.size.width * wScale, rect.size.height * hScale);
-}
-
-CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2)
-{
-    CGFloat fx = (point2.x - point1.x);
-    CGFloat fy = (point2.y - point1.y);
-    
-    return sqrt((fx*fx + fy*fy));
-}
-
-CG_INLINE CGFloat CGAffineTransformGetAngle(CGAffineTransform t)
-{
-    return atan2(t.b, t.a);
-}
-
 
 CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
 {
@@ -72,12 +49,11 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
 
 @property (nonatomic, strong) CAShapeLayer *border;
 @property (nonatomic, strong) UITextView *labelTextView;
-@property (nonatomic, strong) UIButton *rotateButton;
 @property (nonatomic, strong) UIButton *closeButton;
+@property (nonatomic, strong) UIButton *resizeRightButton;
+@property (nonatomic, strong) UIButton *resizeLeftButton;
 
-@property (nonatomic, assign) CGFloat lastScale;
-
-
+@property (nonatomic, assign) CGFloat lastVelocity;
 @property (nonatomic, assign, getter=isShowingEditingHandles) BOOL showEditingHandles;
 
 @end
@@ -90,12 +66,10 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
         CGSize scale = CGAffineTransformGetScale(self.superview.transform);
         CGAffineTransform t = CGAffineTransformMakeScale(scale.width, scale.height);
         [self.closeButton setTransform:CGAffineTransformInvert(t)];
-        [self.rotateButton setTransform:CGAffineTransformInvert(t)];
+        [self.border removeFromSuperlayer];
         
         if (self.isShowingEditingHandles) {
             [self.labelTextView.layer addSublayer:self.border];
-        } else {
-            [self.border removeFromSuperlayer];
         }
     }
 }
@@ -114,18 +88,18 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if (frame.size.width < 75)     frame.size.width = 75;
+    if (frame.size.width < 150)     frame.size.width = 150;
     if (frame.size.height < 25)    frame.size.height = 25;
     
     self = [super initWithFrame:frame];
     if (self) {
-        self.globalInset = 12;
+        self.globalInset = 36;
         
         self.backgroundColor = [UIColor clearColor];
         [self setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
         self.borderColor = [UIColor redColor];
         
-        self.labelTextView = [[UITextView alloc] initWithFrame:CGRectInset(self.bounds, self.globalInset, self.globalInset)];
+        self.labelTextView = [[UITextView alloc] initWithFrame:CGRectInset(self.bounds, self.globalInset, self.globalInset/3)];
         [self.labelTextView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight)];
         [self.labelTextView setClipsToBounds:YES];
         self.labelTextView.delegate = self;
@@ -133,6 +107,7 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
         self.labelTextView.tintColor = [UIColor redColor];
         self.labelTextView.textColor = [UIColor whiteColor];
         self.labelTextView.text = @"";
+        self.labelTextView.scrollEnabled = NO;
         
         self.border = [CAShapeLayer layer];
         self.border.strokeColor = self.borderColor.CGColor;
@@ -141,20 +116,27 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
         
         [self insertSubview:self.labelTextView atIndex:0];
         
-        self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.globalInset * 2, self.globalInset * 2)];
+        self.resizeLeftButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0,
+                                                                           self.globalInset, self.bounds.size.height)];
+        [self.resizeLeftButton setAutoresizingMask:(UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleHeight)];
+        self.resizeLeftButton.backgroundColor = [UIColor clearColor];
+        self.resizeLeftButton.userInteractionEnabled = YES;
+        self.resizeLeftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        [self addSubview:self.resizeLeftButton];
+        
+        self.resizeRightButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width - self.globalInset, 0,
+                                                                            self.globalInset, self.bounds.size.height)];
+        [self.resizeRightButton setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleHeight)];
+        self.resizeRightButton.backgroundColor = [UIColor clearColor];
+        self.resizeRightButton.userInteractionEnabled = YES;
+        self.resizeRightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [self addSubview:self.resizeRightButton];
+        
+        self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(2*self.globalInset/3, 0, 2*self.globalInset/3, 2*self.globalInset/3)];
         [self.closeButton setAutoresizingMask:(UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin)];
-        self.closeButton.backgroundColor = [UIColor whiteColor];
-        self.closeButton.layer.cornerRadius = self.globalInset - 5;
+        self.closeButton.backgroundColor = [UIColor clearColor];
         self.closeButton.userInteractionEnabled = YES;
         [self addSubview:self.closeButton];
-        
-        self.rotateButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width-self.globalInset*2, self.bounds.size.height-self.globalInset*2, self.globalInset*2, self.globalInset*2)];
-        [self.rotateButton setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin)];
-        self.rotateButton.backgroundColor = [UIColor whiteColor];
-        self.rotateButton.layer.cornerRadius = self.globalInset - 5;
-        self.rotateButton.contentMode = UIViewContentModeCenter;
-        self.rotateButton.userInteractionEnabled = YES;
-        [self addSubview:self.rotateButton];
         
         UIPanGestureRecognizer *moveGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveGesture:)];
         [self addGestureRecognizer:moveGesture];
@@ -165,17 +147,17 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
         UITapGestureRecognizer *closeTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeTap:)];
         [self.closeButton addGestureRecognizer:closeTap];
         
-        UIPinchGestureRecognizer *resizeGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(resizeGesture:)];
-        [self addGestureRecognizer:resizeGesture];
+        UIPanGestureRecognizer *resizeRightGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(resizeGesture:)];
+        [self.resizeRightButton addGestureRecognizer:resizeRightGesture];
         
-        UIPanGestureRecognizer *panRotateGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rotateViewPanGesture:)];
-        [self.rotateButton addGestureRecognizer:panRotateGesture];
+        UIPanGestureRecognizer *resizeLeftGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(resizeGesture:)];
+        [self.resizeLeftButton addGestureRecognizer:resizeLeftGesture];
         
         [moveGesture requireGestureRecognizerToFail:closeTap];
         
         [self setEnableMoveRestriction:NO];
         [self setEnableClose:YES];
-        [self setEnableRotate:NO];
+        [self setEnableResizing:YES];
         [self setShowsContentShadow:NO];
         
         [self showEditingHandles];
@@ -199,13 +181,18 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
     _enableClose = value;
     [self.closeButton setHidden:!_enableClose];
     [self.closeButton setUserInteractionEnabled:_enableClose];
+
 }
 
-- (void)setEnableRotate:(BOOL)value
+- (void)setEnableResizing:(BOOL)value
 {
-    _enableRotate = value;
-    [self.rotateButton setHidden:!_enableRotate];
-    [self.rotateButton setUserInteractionEnabled:_enableRotate];
+    _enableResizing = value;
+    [self.resizeRightButton setHidden:!_enableResizing];
+    [self.resizeRightButton setUserInteractionEnabled:_enableResizing];
+    
+    [self.resizeLeftButton setHidden:!_enableResizing];
+    [self.resizeLeftButton setUserInteractionEnabled:_enableResizing];
+    
 }
 
 - (void)setShowsContentShadow:(BOOL)showShadow
@@ -231,10 +218,17 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
     [self.closeButton setImage:_closeImage forState:UIControlStateNormal];
 }
 
-- (void)setRotateImage:(UIImage *)image
+- (void)setLeftResizeImage:(UIImage *)image
 {
-    _rotateImage = image;
-    [self.rotateButton setImage:_rotateImage forState:UIControlStateNormal];
+    _leftResizeImage = image;
+    [self.resizeLeftButton setImage:_leftResizeImage forState:UIControlStateNormal];
+    
+}
+
+- (void)setRightResizeImage:(UIImage *)image
+{
+    _rightResizeImage = image;
+    [self.resizeRightButton setImage:_rightResizeImage forState:UIControlStateNormal];
     
 }
 
@@ -277,21 +271,16 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
     return self.labelTextView.alpha;
 }
 
-//- (void)setAttributedPlaceholder:(NSAttributedString *)attributedPlaceholder
-//{
-//    _attributedPlaceholder = attributedPlaceholder;
-//    [self.labelTextField setAttributedPlaceholder:attributedPlaceholder];
-//    [self.labelTextField adjustsWidthToFillItsContents];
-//}
-
 #pragma mark - Bounds
 
 - (void)hideEditingHandles
 {
     self.showEditingHandles = NO;
-    
     if (self.isEnableClose)       self.closeButton.hidden = YES;
-    if (self.isEnableRotate)      self.rotateButton.hidden = YES;
+    if (self.isenableResizing) {
+        self.resizeRightButton.hidden = YES;
+        self.resizeLeftButton.hidden = YES;
+    }
     
     [self.labelTextView resignFirstResponder];
     
@@ -309,9 +298,11 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
     }
     
     self.showEditingHandles = YES;
-        
     if (self.isEnableClose)       self.closeButton.hidden = NO;
-    if (self.isEnableRotate)      self.rotateButton.hidden = NO;
+    if (self.isenableResizing) {
+        self.resizeRightButton.hidden = NO;
+        self.resizeLeftButton.hidden = NO;
+    }
     
     [self refresh];
     
@@ -322,7 +313,7 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
 
 - (void)resizeInRect:(CGRect)rect
 {
-    [self.labelTextView adjustsFontSizeToFillRect:rect];
+//    [self.labelTextView adjustsFontSizeToFillRect:rect];
 }
 
 #pragma mark - Gestures
@@ -359,10 +350,6 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
         
         [self setCenter:[self estimatedCenter]];
         self.beginBounds = self.bounds;
-        
-        if ([self.delegate respondsToSelector:@selector(textViewDidBeginEditing:)]) {
-            [self.delegate textViewDidBeginEditing:self];
-        }
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
         [self setCenter:[self estimatedCenter]];
         
@@ -399,61 +386,68 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
     return newCenter;
 }
 
-- (void)rotateViewPanGesture:(UIPanGestureRecognizer *)recognizer
-{
-    self.touchLocation = [recognizer locationInView:self.superview];
+- (void)resizeGesture:(UIPanGestureRecognizer *)recognizer {
+    BOOL isRightButtonRecognizer = [self.resizeRightButton.gestureRecognizers containsObject:recognizer];
+    BOOL isLeftButtonRecognizer = [self.resizeLeftButton.gestureRecognizers containsObject:recognizer];
     
-    CGPoint center = CGRectGetCenter(self.frame);
+    if ((isRightButtonRecognizer && !self.resizeRightButton.enabled) || (isLeftButtonRecognizer && !self.resizeLeftButton.enabled)) {
+        return;
+    }
     
-    if ([recognizer state] == UIGestureRecognizerStateBegan) {
-        self.deltaAngle = atan2(self.touchLocation.y-center.y, self.touchLocation.x-center.x)-CGAffineTransformGetAngle(self.transform);
-        
-        self.initialBounds = self.bounds;
-        self.initialDistance = CGPointGetDistance(center, self.touchLocation);
-        
+    CGPoint location = [recognizer locationInView:self.superview];
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        self.touchLocation = location;
+        self.initialBounds = self.frame;
         if([self.delegate respondsToSelector:@selector(textViewDidBeginEditing:)]) {
             [self.delegate textViewDidBeginEditing:self];
+            
+            if (self.resizeRightButton.isHighlighted) {
+                self.resizeLeftButton.enabled = NO;
+                self.resizeLeftButton.selected = NO;
+            }
+            else {
+                self.resizeRightButton.enabled = NO;
+                self.resizeRightButton.selected = NO;
+            }
         }
-    } else if ([recognizer state] == UIGestureRecognizerStateChanged) {
-        float ang = atan2(self.touchLocation.y-center.y, self.touchLocation.x-center.x);
-        
-        float angleDiff = self.deltaAngle - ang;
-        [self setTransform:CGAffineTransformMakeRotation(-angleDiff)];
-        [self setNeedsDisplay];
+    }
+    else if (recognizer.state == UIGestureRecognizerStateChanged) {
+        if (self.touchLocation.x != location.x) {
+            CGFloat leftPosition = 0;
+            CGFloat rightPosition = 0;
+            CGFloat dif = location.x - self.touchLocation.x;
+            if (isRightButtonRecognizer) { rightPosition = dif; }
+            else { leftPosition = dif; }
+
+            [self setFrame: [self estimateFrame:self.initialBounds leftPosition:leftPosition rightPosition:rightPosition]];
+            self.initialBounds = self.frame;
+            self.touchLocation = location;
+        }
         
         if ([self.delegate respondsToSelector:@selector(textViewDidChangeEditing:)]) {
             [self.delegate textViewDidChangeEditing:self];
         }
-    } else if ([recognizer state] == UIGestureRecognizerStateEnded) {
+    }
+    else if ([recognizer state] == UIGestureRecognizerStateEnded) {
+        self.resizeRightButton.enabled = YES;
+        self.resizeLeftButton.enabled = YES;
+        
         if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]) {
             [self.delegate textViewDidEndEditing:self];
         }
     }
 }
 
-- (void)resizeGesture:(UIPinchGestureRecognizer *)recognizer {
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        self.lastScale = 1.0;
-        self.initialBounds = self.bounds;
-        
-        if([self.delegate respondsToSelector:@selector(textViewDidBeginEditing:)]) {
-            [self.delegate textViewDidBeginEditing:self];
-        }
+- (CGRect) estimateFrame:(CGRect) frame leftPosition:(CGFloat) leftPosition rightPosition:(CGFloat) rightPosition
+{
+    CGRect temRect = frame;
+    CGFloat xPos = temRect.origin.x + leftPosition;
+    CGFloat width = temRect.size.width - leftPosition + rightPosition;
+    if ( width > self.globalInset*3) {
+        temRect.size.width = width;
+        temRect.origin.x = xPos;
     }
-    else if (recognizer.state == UIGestureRecognizerStateChanged) {
-        CGFloat scale = 1.0 - (self.lastScale - recognizer.scale);
-        
-        CGRect scaleRect = CGRectScale(self.initialBounds, scale, 1);
-        
-        [self setBounds:scaleRect];
-        [self.labelTextView adjustsFontSizeToFillRect:scaleRect];
-         self.lastScale = 1.0;
-    }
-    else if ([recognizer state] == UIGestureRecognizerStateEnded) {
-        if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]) {
-            [self.delegate textViewDidEndEditing:self];
-        }
-    }
+    return temRect;
 }
 
 #pragma mark - UITextView Delegate
@@ -467,13 +461,19 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
     return NO;
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
+- (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([self.delegate respondsToSelector:@selector(textViewDidStartEditing:)]) {
         [self.delegate textViewDidStartEditing:self];
     }
     
     [textView adjustsWidthToFillItsContents];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]) {
+        [self.delegate textViewDidEndEditing:self];
+    }
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
@@ -530,22 +530,10 @@ static const NSUInteger ACELVMinimumFontSize = 9;
 
 - (void)adjustsWidthToFillItsContents
 {
-    CGFloat viewOffset = 24;
-    CGFloat viewHeight = CGRectGetHeight(self.frame) - viewOffset;
-    NSString *text = (![self.text isEqualToString:@""]) ? self.text : @"";
-    NSCharacterSet *charSet = [NSCharacterSet newlineCharacterSet];
-    NSArray *separatedByNewlineCharacter = [text componentsSeparatedByCharactersInSet:charSet];
-    if (separatedByNewlineCharacter.count > 1) {
-        viewHeight = self.font.pointSize * separatedByNewlineCharacter.count + viewOffset;
-    }
-    
-    CGSize rectSize = [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, viewHeight)];
-   
-    float w1 = (ceilf(rectSize.width) + viewOffset < self.superview.bounds.size.width - viewOffset) ? self.superview.bounds.size.width : ceilf(rectSize.width) + viewOffset;
-    float h1 =(ceilf(rectSize.height) + viewOffset < self.superview.bounds.size.height - viewOffset) ? self.superview.bounds.size.height : ceilf(rectSize.height) + viewOffset;
+    CGSize rectSize = [self sizeThatFits:CGSizeMake(self.bounds.size.width, CGFLOAT_MAX)];
+    float h1 =(ceilf(rectSize.height) < self.bounds.size.height) ? self.superview.bounds.size.height : ceilf(rectSize.height) + (self.superview.bounds.size.height - self.bounds.size.height);
     
     CGRect viewFrame = self.superview.frame;
-    viewFrame.size.width = w1;
     viewFrame.size.height = h1;
     [self.superview setFrame:viewFrame];
 }

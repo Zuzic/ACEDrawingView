@@ -68,18 +68,18 @@
 @property (nonatomic, strong) UIImage *closeImage;
 
 /**
- * Image for rotation button.
+ * Image for left resize button.
  *
- * Default: 
+ * Default:
  */
-@property (nonatomic, strong) UIImage *rotateImage;
+@property (nonatomic, strong) UIImage *leftResizeImage;
 
 /**
- * Placeholder.
+ * Image for right resize button.
  *
- * Default: nil
+ * Default:
  */
-@property (nonatomic, copy) NSAttributedString *attributedPlaceholder;
+@property (nonatomic, strong) UIImage *rightResizeImage;
 
 /*
  * Base delegate protocols.
@@ -101,11 +101,11 @@
 @property (nonatomic, getter=isEnableClose) BOOL enableClose;
 
 /**
- *  Shows rotate/resize butoon.
+ *  Shows resize buttons.
  *
  *  Default: YES.
  */
-@property (nonatomic, getter=isEnableRotate) BOOL enableRotate;
+@property (nonatomic, getter=isenableResizing) BOOL enableResizing;
 
 /**
  *  Resticts movements in superview bounds.
@@ -162,49 +162,49 @@
 /**
  *  Occurs before border and control buttons will show.
  *
- *  @param label    A label object informing the delegate about showing.
+ *  @param textView    A label object informing the delegate about showing.
  */
 - (void)textViewWillShowEditingHandles:(ACEDrawingTextView *)textView;
 
 /**
  *  Occurs when border and control buttons was shown.
  *
- *  @param label    A label object informing the delegate about showing.
+ *  @param textView    A label object informing the delegate about showing.
  */
 - (void)textViewDidShowEditingHandles:(ACEDrawingTextView *)textView;
 
 /**
  *  Occurs when border and control buttons was hidden.
  *
- *  @param label    A label object informing the delegate about hiding.
+ *  @param textView    A label object informing the delegate about hiding.
  */
 - (void)textViewDidHideEditingHandles:(ACEDrawingTextView *)textView;
 
 /**
  *  Occurs when label become first responder.
  *
- *  @param label    A label object informing the delegate about action.
+ *  @param textView    A label object informing the delegate about action.
  */
 - (void)textViewDidStartEditing:(ACEDrawingTextView *)textView;
 
 /**
- *  Occurs when label starts move or rotate.
+ *  Occurs when label starts move or resize
  *
- *  @param label    A label object informing the delegate about action.
+ *  @param textView    A label object informing the delegate about action.
  */
 - (void)textViewDidBeginEditing:(ACEDrawingTextView *)textView;
 
 /**
- *  Occurs when label continues move or rotate.
+ *  Occurs when label continues move or resize.
  *
- *  @param label    A label object informing the delegate about action.
+ *  @param textView    A label object informing the delegate about action.
  */
 - (void)textViewDidChangeEditing:(ACEDrawingTextView *)textView;
 
 /**
- *  Occurs when label ends move or rotate.
+ *  Occurs when label ends move or resize.
  *
- *  @param label    A label object informing the delegate about action.
+ *  @param textView    A label object informing the delegate about action.
  */
 - (void)textViewDidEndEditing:(ACEDrawingTextView *)textView;
 

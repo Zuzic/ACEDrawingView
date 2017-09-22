@@ -99,8 +99,10 @@
     // set the deafault draggable text icons
     NSURL *bundleURL = [[NSBundle bundleForClass:self.classForCoder] URLForResource:@"ACEDraggableText" withExtension:@"bundle"];
     if (bundleURL != nil) {
-        self.draggableTextRotateImage = [UIImage imageWithContentsOfFile:[[NSBundle bundleWithURL:bundleURL] pathForResource:@"sticker_resize" ofType:@"png"]];
+        self.draggableTextRotateImage = [UIImage imageWithContentsOfFile:[[NSBundle bundleWithURL:bundleURL] pathForResource:@"sticker_rotate" ofType:@"png"]];
         self.draggableTextCloseImage  = [UIImage imageWithContentsOfFile:[[NSBundle bundleWithURL:bundleURL] pathForResource:@"sticker_close" ofType:@"png"]];
+        self.draggableTextResizeRightImage  = [UIImage imageWithContentsOfFile:[[NSBundle bundleWithURL:bundleURL] pathForResource:@"sticker_resize_right" ofType:@"png"]];
+        self.draggableTextResizeLeftImage  = [UIImage imageWithContentsOfFile:[[NSBundle bundleWithURL:bundleURL] pathForResource:@"sticker_resize_left" ofType:@"png"]];
     }
 }
 
@@ -330,7 +332,7 @@
     
     // Handle special cases for tool types. The else case handles all the non-text drawing tools.
     // The draggable text tool is purposely left in for better code clarity, even though it does nothing.
-    if ([self.currentTool class] == [ACEDrawingDraggableLabelTool class]) {
+    if ([self.currentTool class] == [ACEDrawingDraggableLabelTool class] || [self.currentTool class] == [ACEDrawingDraggableTextTool class]) {
         // do nothing
         
     } else {
@@ -370,7 +372,7 @@
         
         [self setNeedsDisplayInRect:drawBox];
         
-    } else if ([self.currentTool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
+    } else if ([self.currentTool isKindOfClass:[ACEDrawingDraggableLabelTool class]] || [self.currentTool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
         return;
     
     } else {
@@ -392,6 +394,19 @@
             CGPoint point = [[touches anyObject] locationInView:self];
             [self.currentTool setInitialPoint:point];
             self.draggableLabel = ((ACEDrawingDraggableLabelTool *)self.currentTool).labelView;
+            
+            [self.pathArray addObject:self.currentTool];
+            
+            [self finishDrawing];
+        }
+    } else if([self.currentTool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
+        if (self.draggableTextView.isEditing) {
+            [self.draggableTextView hideEditingHandles];
+            self.draggableTextView = nil;
+        } else {
+            CGPoint point = [[touches anyObject] locationInView:self];
+            [self.currentTool setInitialPoint:point];
+            self.draggableTextView = ((ACEDrawingDraggableTextTool *)self.currentTool).textView;
             
             [self.pathArray addObject:self.currentTool];
             
@@ -484,6 +499,10 @@
         if ([tool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
             [(ACEDrawingDraggableLabelTool *)tool undraw];
         }
+        
+        if ([tool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
+            [(ACEDrawingDraggableTextTool *)tool undraw];
+        }
     }
     
     [self.redoStates removeAllObjects];
@@ -505,6 +524,10 @@
     for (id<ACEDrawingTool> tool in self.pathArray) {
         if ([tool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
             [(ACEDrawingDraggableLabelTool *)tool hideHandle];
+        }
+        
+        if ([tool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
+            [(ACEDrawingDraggableTextTool *)tool hideHandle];
         }
     }
 }
@@ -529,6 +552,10 @@
         if ([self lastStateForTool:undoState.tool inStateArray:self.undoStates]) {
             if ([undoState.tool isKindOfClass:[ACEDrawingDraggableLabelTool class]]) {
                 [(ACEDrawingDraggableLabelTool *)undoState.tool undraw];
+            }
+            
+            if ([undoState.tool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
+                [(ACEDrawingDraggableTextTool *)undoState.tool undraw];
             }
             
             [self.pathArray enumerateObjectsUsingBlock:^(id<ACEDrawingTool> tool, NSUInteger idx, BOOL *stop) {
@@ -619,7 +646,7 @@
 #endif
 }
 
-#pragma mark - ACEDrawingTextViewDelegate
+#pragma mark - ACEDrawingLabelDelegate
 
 - (void)labelViewDidClose:(ACEDrawingLabelView *)label
 {
@@ -690,11 +717,13 @@
     return nil;
 }
 
-#pragma mark - ACEDrawingLabelViewDelegate
+#pragma mark - ACEDrawingTextViewDelegate
 
 - (void)textViewDidClose:(ACEDrawingTextView *)textView
 {
     ACEDrawingDraggableTextTool *tool = [self draggableTextToolForTextView:textView];
+    
+    if (textView.textValue.length == 0) { [tool undraw];}
     
     // TODO: handle close for adding redo state on close
     [self.pathArray removeObject:tool];
@@ -703,6 +732,10 @@
     if ([self.delegate respondsToSelector:@selector(drawingView:didEndDrawUsingTool:)]) {
         [self.delegate drawingView:self didEndDrawUsingTool:self.currentTool];
     }
+}
+
+- (void)textViewWillShowEditingHandles:(ACEDrawingTextView *)textView {
+      [self hideTextToolHandles];
 }
 
 - (void)textViewDidBeginEditing:(ACEDrawingTextView *)textView
@@ -727,6 +760,8 @@
 {
     ACEDrawingDraggableTextTool *tool = [self draggableTextToolForTextView:textView];
     
+    if (textView.textValue.length == 0) { [tool undraw];}
+    
     if (![tool.textView.textValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length) {
         [self.pathArray removeObject:tool];
     }
@@ -740,8 +775,9 @@
     }
     
     if (numberOfStates == 0 && tool) {
-        [self.undoStates addObject:[tool captureToolState]];
-        
+        if (textView.textValue.length > 0) {
+              [self.undoStates addObject:[tool captureToolState]];
+        }
         // call the delegate
         if ([self.delegate respondsToSelector:@selector(drawingView:didEndDrawUsingTool:)]) {
             [self.delegate drawingView:self didEndDrawUsingTool:tool];
