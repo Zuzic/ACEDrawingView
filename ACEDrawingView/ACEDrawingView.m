@@ -197,12 +197,11 @@
 - (UIImage *)applyDrawToImage:(UIImage *)baseImage
 {
     UIImage *drawings = [self drawings];
-    
     // scale drawings to size of base image
-    drawings = [self resizeImage:drawings forSize:baseImage.size];// (baseImage.size.width > baseImage.size.height) ? [self scaleImage:drawings proportionallyToWidth:baseImage.size.width] : [self scaleImage:drawings proportionallyToHeight:baseImage.size.height];
+    UIImage *updateImage = [self resizeImage:baseImage forSize:drawings.size];// (baseImage.size.width > baseImage.size.height) ? [self scaleImage:drawings proportionallyToWidth:baseImage.size.width] : [self scaleImage:drawings proportionallyToHeight:baseImage.size.height];
     
     // blend drawings with image
-    return [self blendImage:baseImage topImage:drawings];
+    return [self blendImage:updateImage topImage:drawings];
 }
 
 - (void)finishDrawing
@@ -845,4 +844,3 @@
 }
 
 @end
-
