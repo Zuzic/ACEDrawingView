@@ -199,7 +199,7 @@
     UIImage *drawings = [self drawings];
     
     // scale drawings to size of base image
-    drawings = (baseImage.size.width > baseImage.size.height) ? [self scaleImage:drawings proportionallyToWidth:baseImage.size.width] : [self scaleImage:drawings proportionallyToHeight:baseImage.size.height];
+    drawings = [self resizeImage:drawings forSize:baseImage.size];// (baseImage.size.width > baseImage.size.height) ? [self scaleImage:drawings proportionallyToWidth:baseImage.size.width] : [self scaleImage:drawings proportionallyToHeight:baseImage.size.height];
     
     // blend drawings with image
     return [self blendImage:baseImage topImage:drawings];
@@ -817,6 +817,16 @@
     CGFloat width = sourceImage.size.width * (height / sourceImage.size.height);
     UIGraphicsBeginImageContext(CGSizeMake(width, height));
     [sourceImage drawInRect:CGRectMake(0, 0, width, height)];
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (UIImage*)resizeImage:(UIImage *)sourceImage forSize:(CGSize) size
+{
+    UIImage *newImage = nil;
+    UIGraphicsBeginImageContext(CGSizeMake(size.width, size.height));
+    [sourceImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
     newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;

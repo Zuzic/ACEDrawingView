@@ -90,7 +90,7 @@
     self.lineColor = kDefaultLineColor;
     self.lineWidth = kDefaultLineWidth;
     self.lineAlpha = kDefaultLineAlpha;
-
+    
     self.drawMode = ACEDrawingModeOriginalSize;
     
     // set the transparent background
@@ -199,7 +199,7 @@
     UIImage *drawings = [self drawings];
     
     // scale drawings to size of base image
-    drawings = (baseImage.size.width > baseImage.size.height) ? [self scaleImage:drawings proportionallyToWidth:baseImage.size.width] : [self scaleImage:drawings proportionallyToHeight:baseImage.size.height];
+    drawings = [self resizeImage:drawings forSize:baseImage.size];// (baseImage.size.width > baseImage.size.height) ? [self scaleImage:drawings proportionallyToWidth:baseImage.size.width] : [self scaleImage:drawings proportionallyToHeight:baseImage.size.height];
     
     // blend drawings with image
     return [self blendImage:baseImage topImage:drawings];
@@ -255,14 +255,14 @@
             tool.drawingView = self;
             return tool;
         }
-        
+            
         case ACEDrawingToolTypeDraggableText:
         {
             ACEDrawingDraggableTextTool *tool = ACE_AUTORELEASE([ACEDrawingDraggableTextTool new]);
             tool.drawingView = self;
             return tool;
         }
-
+            
         case ACEDrawingToolTypeRectagleStroke:
         {
             ACEDrawingRectangleTool *tool = ACE_AUTORELEASE([ACEDrawingRectangleTool new]);
@@ -375,7 +375,7 @@
         
     } else if ([self.currentTool isKindOfClass:[ACEDrawingDraggableLabelTool class]] || [self.currentTool isKindOfClass:[ACEDrawingDraggableTextTool class]]) {
         return;
-    
+        
     } else {
         [self.currentTool moveFromPoint:previousPoint1 toPoint:currentPoint];
         [self setNeedsDisplay];
@@ -567,7 +567,7 @@
             
             [self.undoStates removeLastObject];
             
-        // undo for a tools sub states
+            // undo for a tools sub states
         } else {
             [self.undoStates removeLastObject];
             if ([undoState.tool respondsToSelector:@selector(applyToolState:)]) {
@@ -677,7 +677,7 @@
 
 - (void)labelViewDidShowEditingHandles:(ACEDrawingLabelView *)label
 {
-    self.draggableLabel = label;    
+    self.draggableLabel = label;
 }
 
 - (void)labelViewDidHideEditingHandles:(ACEDrawingLabelView *)label
@@ -736,7 +736,7 @@
 }
 
 - (void)textViewWillShowEditingHandles:(ACEDrawingTextView *)textView {
-      [self hideTextToolHandles];
+    [self hideTextToolHandles];
 }
 
 - (void)textViewDidBeginEditing:(ACEDrawingTextView *)textView
@@ -777,7 +777,7 @@
     
     if (numberOfStates == 0 && tool) {
         if (textView.textValue.length > 0) {
-              [self.undoStates addObject:[tool captureToolState]];
+            [self.undoStates addObject:[tool captureToolState]];
         }
         // call the delegate
         if ([self.delegate respondsToSelector:@selector(drawingView:didEndDrawUsingTool:)]) {
@@ -822,6 +822,16 @@
     return newImage;
 }
 
+- (UIImage*)resizeImage:(UIImage *)sourceImage forSize:(CGSize) size
+{
+    UIImage *newImage = nil;
+    UIGraphicsBeginImageContext(CGSizeMake(size.width, size.height));
+    [sourceImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 // if blending results in memory issues, please scale down the size of images before blending
 - (UIImage *)blendImage:(UIImage *)imageBottom topImage:(UIImage *)imageTop
 {
@@ -835,3 +845,4 @@
 }
 
 @end
+
