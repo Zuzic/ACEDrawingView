@@ -188,6 +188,7 @@
     for (id<ACEDrawingTool> tool in self.pathArray) {
         [tool draw];
     }
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;

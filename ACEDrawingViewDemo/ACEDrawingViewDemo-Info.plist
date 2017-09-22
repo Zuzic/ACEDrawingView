@@ -49,5 +49,7 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>test</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>test</string>
 </dict>
 </plist>
