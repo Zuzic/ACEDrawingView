@@ -283,7 +283,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ACEDrawingViewDemo/Pods-ACEDrawingViewDemo-resources.sh",
-				"$PODS_CONFIGURATION_BUILD_DIR/ACEDrawingView/ACEDraggableText.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/ACEDrawingView/ACEDraggableText.bundle,
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (

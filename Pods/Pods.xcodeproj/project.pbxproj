@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		011F6E68A4E617B2F9D2AD4545C750E4 /* ACEDrawingView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E54D2CA9F4AA3D3993696652558DB7F2 /* ACEDrawingView-dummy.m */; };
 		013A62E3BE471344F5120078947A6B1C /* ACEDrawingTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD0F551204AB882A81719F49DBC9011 /* ACEDrawingTools.m */; };
-		0203486038711FCEDB3F40ADE54B4416 /* sticker_resize@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F870924D3263367EEE058CE6967EFB5 /* sticker_resize@3x.png */; };
+		0203486038711FCEDB3F40ADE54B4416 /* sticker_resize_left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F870924D3263367EEE058CE6967EFB5 /* sticker_resize_left@3x.png */; };
 		0DFEF9B051BE83E9EF5546FDB84DAC19 /* sticker_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 788394A8571C55D30A5B973AB2BABE42 /* sticker_close@3x.png */; };
 		132549761B83BFBD7F7E1FC14290E6FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F9A0E952988935C32EDDB1429D7133 /* Foundation.framework */; };
 		19F4F849DFD5A9B4CD89993943F8B356 /* ACEDrawingLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 58CFD329A7BC083A2CC4EAB96F5CC33B /* ACEDrawingLabelView.m */; };
@@ -18,17 +18,23 @@
 		43A3EA60629B503A627CFF82A00CABD9 /* ACEDrawingTools.h in Headers */ = {isa = PBXBuildFile; fileRef = FCA89261E0C7AB77CB8F8E2C831F0FA0 /* ACEDrawingTools.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		45D40BEE92844B2EAF30431D18E93BB3 /* ACEDrawingToolState.m in Sources */ = {isa = PBXBuildFile; fileRef = D4154DB92F02E32014A5A03CDD88E3DD /* ACEDrawingToolState.m */; };
 		4C8CC9F0017158BEC383E8ECE2983E8E /* ACEDrawingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A17183D3B0A77BB2D9671979ABE1333A /* ACEDrawingTextView.m */; };
-		5241BAB7FA7BAD7F8C5C743D1BA54673 /* sticker_resize@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA73F8C93009C8DED7086A1124729EF8 /* sticker_resize@2x.png */; };
+		5241BAB7FA7BAD7F8C5C743D1BA54673 /* sticker_resize_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA73F8C93009C8DED7086A1124729EF8 /* sticker_resize_left@2x.png */; };
 		6FC409146DA5AD5AB63984B81515F00F /* Pods-ACEDrawingViewDemoTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FFC9A3E9F3AE3C40217D6AE831454656 /* Pods-ACEDrawingViewDemoTests-dummy.m */; };
 		82CBD1623A54DA04DF5933A760704B6B /* ACEDrawingToolState.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BF03BE8EA6566B1BD1A3D55C6CD8E96 /* ACEDrawingToolState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8F81A3FDCC2CD6F359B8053518BB57E3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2770B482BFE91273C8560623F1422C /* QuartzCore.framework */; };
 		9338EE3970389A26D3097C82CAE84697 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F9A0E952988935C32EDDB1429D7133 /* Foundation.framework */; };
 		94C8B6D81ABEEC0A55FC44B103DED794 /* Pods-ACEDrawingViewDemo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C43383922FE4E9BE9A89F61DF65AD2D1 /* Pods-ACEDrawingViewDemo-dummy.m */; };
 		AABB3EAD33AC6F992EDD630FDAF0FE90 /* ACEDrawingTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 74930040B2136C05C57E7A1C262A95F4 /* ACEDrawingTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBE771C81F7424DD00BA3065 /* sticker_rotate@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBE771C51F7424DD00BA3065 /* sticker_rotate@3x.png */; };
+		BBE771C91F7424DD00BA3065 /* sticker_rotate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBE771C61F7424DD00BA3065 /* sticker_rotate@2x.png */; };
+		BBE771CA1F7424DD00BA3065 /* sticker_rotate.png in Resources */ = {isa = PBXBuildFile; fileRef = BBE771C71F7424DD00BA3065 /* sticker_rotate.png */; };
+		BBE771CE1F7425B400BA3065 /* sticker_resize_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBE771CB1F7425B400BA3065 /* sticker_resize_right@3x.png */; };
+		BBE771CF1F7425B400BA3065 /* sticker_resize_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBE771CC1F7425B400BA3065 /* sticker_resize_right@2x.png */; };
+		BBE771D01F7425B400BA3065 /* sticker_resize_right.png in Resources */ = {isa = PBXBuildFile; fileRef = BBE771CD1F7425B400BA3065 /* sticker_resize_right.png */; };
 		C0D2647B4CF7EB809A6824E0F46B95D3 /* sticker_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 822E40E0DDE80DE35962FA2704E84C85 /* sticker_close.png */; };
 		C8829BC609A00BE192AC32768560E4D5 /* ACEDrawingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B958ECE63A300818F9EA1E219F04822 /* ACEDrawingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D5EFC5D38F28CFB703BD57CC992C8BAC /* ACEDrawingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 81FBEABA67495DEC6E7412B0D1B71385 /* ACEDrawingView.m */; };
-		EF53CC808D4B8C667379CD2E62BC86A7 /* sticker_resize.png in Resources */ = {isa = PBXBuildFile; fileRef = 2968A4D9EAA85593B50A2BD8604268FB /* sticker_resize.png */; };
+		EF53CC808D4B8C667379CD2E62BC86A7 /* sticker_resize_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 2968A4D9EAA85593B50A2BD8604268FB /* sticker_resize_left.png */; };
 		F3CDA03BC1A4931E95273D32E77A0071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54F9A0E952988935C32EDDB1429D7133 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,20 +57,20 @@
 
 /* Begin PBXFileReference section */
 		166A733110FEEDA8D4D667563F359837 /* Pods-ACEDrawingViewDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ACEDrawingViewDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		1F870924D3263367EEE058CE6967EFB5 /* sticker_resize@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "sticker_resize@3x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_resize@3x.png"; sourceTree = "<group>"; };
+		1F870924D3263367EEE058CE6967EFB5 /* sticker_resize_left@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "sticker_resize_left@3x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_resize_left@3x.png"; sourceTree = "<group>"; };
 		1FD0F551204AB882A81719F49DBC9011 /* ACEDrawingTools.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ACEDrawingTools.m; path = ACEDrawingView/ACEDrawingTools.m; sourceTree = "<group>"; };
-		2968A4D9EAA85593B50A2BD8604268FB /* sticker_resize.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = sticker_resize.png; path = ACEDrawingView/ACEDraggableText/sticker_resize.png; sourceTree = "<group>"; };
+		2968A4D9EAA85593B50A2BD8604268FB /* sticker_resize_left.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = sticker_resize_left.png; path = ACEDrawingView/ACEDraggableText/sticker_resize_left.png; sourceTree = "<group>"; };
 		2AFB83531F2DA650E8FDD042D66F12DD /* Pods-ACEDrawingViewDemoTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ACEDrawingViewDemoTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		3BF03BE8EA6566B1BD1A3D55C6CD8E96 /* ACEDrawingToolState.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ACEDrawingToolState.h; path = ACEDrawingView/ACEDrawingToolState.h; sourceTree = "<group>"; };
 		3C33529F69D203D08453D1C1061994D7 /* Pods-ACEDrawingViewDemo-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ACEDrawingViewDemo-acknowledgements.plist"; sourceTree = "<group>"; };
-		43FA879618133F3BB7ED5798B3499CB5 /* libACEDrawingView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libACEDrawingView.a; path = libACEDrawingView.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		43FA879618133F3BB7ED5798B3499CB5 /* libACEDrawingView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libACEDrawingView.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B958ECE63A300818F9EA1E219F04822 /* ACEDrawingView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ACEDrawingView.h; path = ACEDrawingView/ACEDrawingView.h; sourceTree = "<group>"; };
-		4D4C2456E224CAE3B0BD088A7BE525ED /* libPods-ACEDrawingViewDemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-ACEDrawingViewDemoTests.a"; path = "libPods-ACEDrawingViewDemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D4C2456E224CAE3B0BD088A7BE525ED /* libPods-ACEDrawingViewDemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ACEDrawingViewDemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9A0E952988935C32EDDB1429D7133 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		58CFD329A7BC083A2CC4EAB96F5CC33B /* ACEDrawingLabelView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ACEDrawingLabelView.m; path = ACEDrawingView/ACEDrawingLabelView.m; sourceTree = "<group>"; };
 		5A2EA855C35E7F1C6812C29165E7F99C /* ResourceBundle-ACEDraggableText-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-ACEDraggableText-Info.plist"; sourceTree = "<group>"; };
 		5F7D329BD3E41490D419B042BDB179DD /* Pods-ACEDrawingViewDemo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ACEDrawingViewDemo-acknowledgements.markdown"; sourceTree = "<group>"; };
-		6504D98FE9A792AFA951D2E0A69443DC /* libPods-ACEDrawingViewDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-ACEDrawingViewDemo.a"; path = "libPods-ACEDrawingViewDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6504D98FE9A792AFA951D2E0A69443DC /* libPods-ACEDrawingViewDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ACEDrawingViewDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C8DB377AC7599D16028DFBC308DDA35 /* ACEDrawingView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ACEDrawingView.xcconfig; sourceTree = "<group>"; };
 		74930040B2136C05C57E7A1C262A95F4 /* ACEDrawingTextView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ACEDrawingTextView.h; path = ACEDrawingView/ACEDrawingTextView.h; sourceTree = "<group>"; };
 		788394A8571C55D30A5B973AB2BABE42 /* sticker_close@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "sticker_close@3x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_close@3x.png"; sourceTree = "<group>"; };
@@ -73,18 +79,24 @@
 		81FBEABA67495DEC6E7412B0D1B71385 /* ACEDrawingView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ACEDrawingView.m; path = ACEDrawingView/ACEDrawingView.m; sourceTree = "<group>"; };
 		822E40E0DDE80DE35962FA2704E84C85 /* sticker_close.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = sticker_close.png; path = ACEDrawingView/ACEDraggableText/sticker_close.png; sourceTree = "<group>"; };
 		84F84D953FC1B2609ED099963EA983AB /* Pods-ACEDrawingViewDemoTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ACEDrawingViewDemoTests-resources.sh"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9530781D6E4C4F18AF0C96328DE6B25A /* ACEDrawingView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ACEDrawingView-prefix.pch"; sourceTree = "<group>"; };
 		A17183D3B0A77BB2D9671979ABE1333A /* ACEDrawingTextView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ACEDrawingTextView.m; path = ACEDrawingView/ACEDrawingTextView.m; sourceTree = "<group>"; };
 		AEB88002D3D9AAF87B76B0F2C51AD6CB /* Pods-ACEDrawingViewDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ACEDrawingViewDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		BBE771C51F7424DD00BA3065 /* sticker_rotate@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sticker_rotate@3x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_rotate@3x.png"; sourceTree = "<group>"; };
+		BBE771C61F7424DD00BA3065 /* sticker_rotate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sticker_rotate@2x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_rotate@2x.png"; sourceTree = "<group>"; };
+		BBE771C71F7424DD00BA3065 /* sticker_rotate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sticker_rotate.png; path = ACEDrawingView/ACEDraggableText/sticker_rotate.png; sourceTree = "<group>"; };
+		BBE771CB1F7425B400BA3065 /* sticker_resize_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sticker_resize_right@3x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_resize_right@3x.png"; sourceTree = "<group>"; };
+		BBE771CC1F7425B400BA3065 /* sticker_resize_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sticker_resize_right@2x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_resize_right@2x.png"; sourceTree = "<group>"; };
+		BBE771CD1F7425B400BA3065 /* sticker_resize_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sticker_resize_right.png; path = ACEDrawingView/ACEDraggableText/sticker_resize_right.png; sourceTree = "<group>"; };
 		BCDC205533B36933C58465A348809568 /* Pods-ACEDrawingViewDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ACEDrawingViewDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BFD1968D5C6A58130B21982DD0F1BE52 /* sticker_close@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "sticker_close@2x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_close@2x.png"; sourceTree = "<group>"; };
 		C43383922FE4E9BE9A89F61DF65AD2D1 /* Pods-ACEDrawingViewDemo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ACEDrawingViewDemo-dummy.m"; sourceTree = "<group>"; };
 		C95154BC47A1F9C547C00D6DABD7075E /* Pods-ACEDrawingViewDemo-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ACEDrawingViewDemo-frameworks.sh"; sourceTree = "<group>"; };
 		D3679E819BD0457F784AD340A52602C3 /* Pods-ACEDrawingViewDemoTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ACEDrawingViewDemoTests-frameworks.sh"; sourceTree = "<group>"; };
 		D4154DB92F02E32014A5A03CDD88E3DD /* ACEDrawingToolState.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ACEDrawingToolState.m; path = ACEDrawingView/ACEDrawingToolState.m; sourceTree = "<group>"; };
-		D9E9225584754FA3692727DD1322EF08 /* ACEDraggableText.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = ACEDraggableText.bundle; path = ACEDraggableText.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA73F8C93009C8DED7086A1124729EF8 /* sticker_resize@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "sticker_resize@2x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_resize@2x.png"; sourceTree = "<group>"; };
+		D9E9225584754FA3692727DD1322EF08 /* ACEDraggableText.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ACEDraggableText.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA73F8C93009C8DED7086A1124729EF8 /* sticker_resize_left@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "sticker_resize_left@2x.png"; path = "ACEDrawingView/ACEDraggableText/sticker_resize_left@2x.png"; sourceTree = "<group>"; };
 		E54D2CA9F4AA3D3993696652558DB7F2 /* ACEDrawingView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ACEDrawingView-dummy.m"; sourceTree = "<group>"; };
 		E73C3C2850866862F799044B10087D0F /* Pods-ACEDrawingViewDemo-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ACEDrawingViewDemo-resources.sh"; sourceTree = "<group>"; };
 		FADAA90664CF32E4E538CE49437F1D43 /* Pods-ACEDrawingViewDemoTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ACEDrawingViewDemoTests-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -179,7 +191,6 @@
 				A74F71E180A78A74D1B367E3111E5B14 /* Resources */,
 				F66BC750451C3897BEC53072A4C478D6 /* Support Files */,
 			);
-			name = ACEDrawingView;
 			path = ACEDrawingView;
 			sourceTree = "<group>";
 		};
@@ -221,12 +232,18 @@
 		A74F71E180A78A74D1B367E3111E5B14 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BBE771CD1F7425B400BA3065 /* sticker_resize_right.png */,
+				BBE771CC1F7425B400BA3065 /* sticker_resize_right@2x.png */,
+				BBE771CB1F7425B400BA3065 /* sticker_resize_right@3x.png */,
+				BBE771C71F7424DD00BA3065 /* sticker_rotate.png */,
+				BBE771C61F7424DD00BA3065 /* sticker_rotate@2x.png */,
+				BBE771C51F7424DD00BA3065 /* sticker_rotate@3x.png */,
 				822E40E0DDE80DE35962FA2704E84C85 /* sticker_close.png */,
 				BFD1968D5C6A58130B21982DD0F1BE52 /* sticker_close@2x.png */,
 				788394A8571C55D30A5B973AB2BABE42 /* sticker_close@3x.png */,
-				2968A4D9EAA85593B50A2BD8604268FB /* sticker_resize.png */,
-				DA73F8C93009C8DED7086A1124729EF8 /* sticker_resize@2x.png */,
-				1F870924D3263367EEE058CE6967EFB5 /* sticker_resize@3x.png */,
+				2968A4D9EAA85593B50A2BD8604268FB /* sticker_resize_left.png */,
+				DA73F8C93009C8DED7086A1124729EF8 /* sticker_resize_left@2x.png */,
+				1F870924D3263367EEE058CE6967EFB5 /* sticker_resize_left@3x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -380,12 +397,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBE771CF1F7425B400BA3065 /* sticker_resize_right@2x.png in Resources */,
 				C0D2647B4CF7EB809A6824E0F46B95D3 /* sticker_close.png in Resources */,
+				BBE771C81F7424DD00BA3065 /* sticker_rotate@3x.png in Resources */,
+				BBE771CE1F7425B400BA3065 /* sticker_resize_right@3x.png in Resources */,
 				21C2DDA662196B90099BAF20B5E5880B /* sticker_close@2x.png in Resources */,
 				0DFEF9B051BE83E9EF5546FDB84DAC19 /* sticker_close@3x.png in Resources */,
-				EF53CC808D4B8C667379CD2E62BC86A7 /* sticker_resize.png in Resources */,
-				5241BAB7FA7BAD7F8C5C743D1BA54673 /* sticker_resize@2x.png in Resources */,
-				0203486038711FCEDB3F40ADE54B4416 /* sticker_resize@3x.png in Resources */,
+				BBE771D01F7425B400BA3065 /* sticker_resize_right.png in Resources */,
+				EF53CC808D4B8C667379CD2E62BC86A7 /* sticker_resize_left.png in Resources */,
+				BBE771C91F7424DD00BA3065 /* sticker_rotate@2x.png in Resources */,
+				5241BAB7FA7BAD7F8C5C743D1BA54673 /* sticker_resize_left@2x.png in Resources */,
+				0203486038711FCEDB3F40ADE54B4416 /* sticker_resize_left@3x.png in Resources */,
+				BBE771CA1F7424DD00BA3065 /* sticker_rotate.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -197,7 +197,7 @@
                                                     otherButtonTitles:@"Pen", @"Line", @"Arrow",
                                   @"Rect (Stroke)", @"Rect (Fill)",
                                   @"Ellipse (Stroke)", @"Ellipse (Fill)",
-                                  @"Eraser", @"Draggable Text",
+                                  @"Eraser", @"Draggable Label", @"Draggable Text",
                                   nil];
     
     [actionSheet setTag:kActionSheetTool];

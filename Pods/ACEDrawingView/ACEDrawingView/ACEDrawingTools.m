@@ -212,12 +212,13 @@ CGPoint midPoint(CGPoint p1, CGPoint p2)
     CGRect frame = CGRectMake(firstPoint.x, firstPoint.y, 50, 100);
     
     _textView = [[ACEDrawingTextView alloc] initWithFrame:frame];
-    _textView.delegate     = self.drawingView;
-    _textView.fontSize     = 18.0;
-    _textView.fontName     = self.drawingView.draggableTextFontName ?: [UIFont systemFontOfSize:_textView.fontSize].fontName;
-    _textView.textColor    = self.lineColor;
-    _textView.closeImage   = self.drawingView.draggableTextCloseImage;
-    _textView.rotateImage  = self.drawingView.draggableTextRotateImage;
+    _textView.delegate          = self.drawingView;
+    _textView.fontSize          = 18.0;
+    _textView.fontName          = self.drawingView.draggableTextFontName ?: [UIFont systemFontOfSize:_textView.fontSize].fontName;
+    _textView.textColor         = self.lineColor;
+    _textView.closeImage        = self.drawingView.draggableTextCloseImage;
+    _textView.leftResizeImage   = self.drawingView.draggableTextResizeLeftImage;
+    _textView.rightResizeImage  = self.drawingView.draggableTextResizeRightImage;
 }
 
 - (void)moveFromPoint:(CGPoint)startPoint toPoint:(CGPoint)endPoint
