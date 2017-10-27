@@ -29,7 +29,7 @@
 
 #define ACEDrawingViewVersion   2.0.1
 
-typedef enum {
+typedef enum ACEDrawingToolType: NSInteger {
     ACEDrawingToolTypePen,
     ACEDrawingToolTypeLine,
     ACEDrawingToolTypeArrow,

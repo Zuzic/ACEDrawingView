@@ -213,7 +213,7 @@ CGPoint midPoint(CGPoint p1, CGPoint p2)
     
     _textView = [[ACEDrawingTextView alloc] initWithFrame:frame];
     _textView.delegate          = self.drawingView;
-    _textView.fontSize          = 18.0;
+    _textView.fontSize          = 30.0;
     _textView.fontName          = self.drawingView.draggableTextFontName ?: [UIFont systemFontOfSize:_textView.fontSize].fontName;
     _textView.textColor         = self.lineColor;
     _textView.closeImage        = self.drawingView.draggableTextCloseImage;
