@@ -213,6 +213,14 @@
 #pragma mark - UITextField Category for DynamicFontSize
 
 @interface UITextView (DynamicFontSize)
+
+/**
+ *  Adjust font size to new bounds.
+ *
+ *  @param newBounds A new bounds.
+ */
+- (void)adjustsFontSizeToFillRect:(CGRect)newBounds;
+
 /**
  *  Adjust width to new text.
  */

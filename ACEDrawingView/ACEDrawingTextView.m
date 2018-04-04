@@ -32,8 +32,6 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
     return CGSizeMake(sqrt(t.a * t.a + t.c * t.c), sqrt(t.b * t.b + t.d * t.d)) ;
 }
 
-#define defaultHeight  50
-
 @interface ACEDrawingTextView () <UIGestureRecognizerDelegate, UITextViewDelegate>
 
 @property (nonatomic, assign) CGFloat globalInset;
@@ -90,8 +88,8 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if (frame.size.width < 300)     frame.size.width = 300;
-    if (frame.size.height < 50)    frame.size.height = 50;
+    if (frame.size.width < 150)     frame.size.width = 150;
+    if (frame.size.height < 25)    frame.size.height = 25;
     
     self = [super initWithFrame:frame];
     if (self) {
@@ -313,7 +311,10 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
     }
 }
 
-- (void)resizeInRect:(CGRect)rect {}
+- (void)resizeInRect:(CGRect)rect
+{
+//    [self.labelTextView adjustsFontSizeToFillRect:rect];
+}
 
 #pragma mark - Gestures
 
@@ -404,8 +405,7 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
                 self.resizeLeftButton.enabled = NO;
                 self.resizeLeftButton.selected = NO;
             }
-            
-            if (self.resizeLeftButton.isHighlighted) {
+            else {
                 self.resizeRightButton.enabled = NO;
                 self.resizeRightButton.selected = NO;
             }
@@ -427,9 +427,6 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
         if ([self.delegate respondsToSelector:@selector(textViewDidChangeEditing:)]) {
             [self.delegate textViewDidChangeEditing:self];
         }
-        
-        [self.labelTextView adjustsWidthToFillItsContents];
-        
     }
     else if ([recognizer state] == UIGestureRecognizerStateEnded) {
         self.resizeRightButton.enabled = YES;
@@ -438,8 +435,6 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
         if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]) {
             [self.delegate textViewDidEndEditing:self];
         }
-        
-        [self.labelTextView adjustsWidthToFillItsContents];
     }
 }
 
@@ -510,21 +505,33 @@ CG_INLINE CGSize CGAffineTransformGetScale(CGAffineTransform t)
 static const NSUInteger ACELVMaximumFontSize = 101;
 static const NSUInteger ACELVMinimumFontSize = 9;
 
+- (void)adjustsFontSizeToFillRect:(CGRect)newBounds
+{
+    CGFloat viewOffset = 24;
+    NSString *text = (![self.text isEqualToString:@""]) ? self.text : @"";
+    NSCharacterSet *charSet = [NSCharacterSet newlineCharacterSet];
+    NSArray *separatedByNewlineCharacter = [text componentsSeparatedByCharactersInSet:charSet];
+    
+    for (NSUInteger i = ACELVMaximumFontSize; i > ACELVMinimumFontSize; i--) {
+        CGFloat viewHeight = CGRectGetHeight(self.frame) - viewOffset;
+       
+        if (separatedByNewlineCharacter.count > 1) {
+            viewHeight = self.font.pointSize * separatedByNewlineCharacter.count + viewOffset;
+        }
+        
+        CGSize rectSize = [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, viewHeight)];
+        
+        if (rectSize.height <= CGRectGetHeight(newBounds)) {
+            ((ACEDrawingTextView *)self.superview).fontSize = (CGFloat)i-1;
+            break;
+        }
+    }
+}
+
 - (void)adjustsWidthToFillItsContents
 {
     CGSize rectSize = [self sizeThatFits:CGSizeMake(self.bounds.size.width, CGFLOAT_MAX)];
-    
-    float h1 = 0;
-    
-    if (ceilf(rectSize.height) < self.bounds.size.height && ceilf(rectSize.height) < defaultHeight) {
-        h1 = defaultHeight;
-    }
-    else if (ceilf(rectSize.height) < self.bounds.size.height && ceilf(rectSize.height) > defaultHeight) {
-        h1 = self.bounds.size.height;
-    }
-    else {
-        h1 = ceilf(rectSize.height) + (self.superview.bounds.size.height - self.bounds.size.height);
-    }
+    float h1 =(ceilf(rectSize.height) < self.bounds.size.height) ? self.superview.bounds.size.height : ceilf(rectSize.height) + (self.superview.bounds.size.height - self.bounds.size.height);
     
     CGRect viewFrame = self.superview.frame;
     viewFrame.size.height = h1;

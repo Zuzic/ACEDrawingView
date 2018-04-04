@@ -29,7 +29,7 @@
 
 #define ACEDrawingViewVersion   2.0.1
 
-typedef enum ACEDrawingToolType: NSInteger {
+typedef enum {
     ACEDrawingToolTypePen,
     ACEDrawingToolTypeLine,
     ACEDrawingToolTypeArrow,
@@ -73,6 +73,7 @@ typedef NS_ENUM(NSUInteger, ACEDrawingMode) {
 @property (nonatomic, strong, readonly) UIImage *image;
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic, readonly) NSUInteger undoSteps;
+@property (nonatomic, readonly) BOOL isImageExist;
 
 // load external image
 - (void)loadImage:(UIImage *)image;
