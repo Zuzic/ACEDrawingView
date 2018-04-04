@@ -481,6 +481,10 @@
 
 #pragma mark - Actions
 
+- (BOOL) isImageExist {
+    return self.cacheImage != nil;
+}
+
 - (UIImage *)image
 {
     UIGraphicsBeginImageContextWithOptions(self.frame.size, NO, 0.0);
